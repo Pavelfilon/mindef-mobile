@@ -1,0 +1,94 @@
+<!-- dialog.html -->
+<template>
+	<div class="page" data-name="dialog">
+		<div class="navbar">
+			<div class="navbar-inner sliding">
+				<div class="left">
+					<a href="#" class="link back">
+						<i class="icon icon-back"></i>
+						<span class="ios-only">Back</span>
+					</a>
+				</div>
+				<div class="title">Dialog</div>
+			</div>
+		</div>
+		<div class="page-content block">
+			<h1>Voorbeeld Dialog</h1>
+			<div class="row">
+				<div class="col">
+					<button class="col button button-raised" @click="openAlert">Alert</button>
+				</div>
+				<div class="col">
+					<button class="col button button-raised" @click="openConfirm">Confirm</button>
+				</div>
+				<div class="col">
+					<button class="col button button-raised" @click="openLogin">Login</button>
+				</div>
+			</div>
+			<!-- Nieuwe rij, eigen dialog -->
+			<div class="row">
+				<div class="col">
+					<button class="col button button-raised" @click="openCustom">Zelfgemaakt</button>
+				</div>
+			</div>
+		</div>
+	</div>
+</template>
+<script>
+	//#region Custom Dialog
+	// *************************
+	// Zelfgemaakte dialog
+	// Voor opties en mogelijkheden, zie de documentatie op https://framework7.io/docs/dialog.html
+	// *************************
+	// 1. Parameters instellen.
+	// var parameters = {
+	// 	title: 'Zelfgemaakte dialog',
+	// 	content: 'Houd jij van pizza?',
+	// 	buttons: [
+	// 		{
+	// 			text: 'Nee'
+	// 		},
+	// 		{
+	// 			text: 'Ja'
+	// 		},
+	// 		{
+	// 			text: 'Op zondag',
+	// 			keyCodes: [13],
+	// 			onClick: function () {
+	// 				app.dialog.alert('Geweldig! Nu op zondag aanbiedingen bij Pizza Hut!');
+	// 			}
+	// 		},
+
+	// 	]
+	// };
+	// // 2. De dialog maken. Hij wordt later, in de functie openCustom() aangeroepen/geopend.
+	// var customDialog = app.dialog.create(parameters)
+	//#endregion Custom Dialog
+	return {
+		methods: {
+			// standaard alert-venster
+			openAlert: function () {
+				app.dialog.alert('Dit is een dialog. Je kunt er alleen een mededeling in doen!');
+			},
+			// confirm - een vraag stellen; let op de callbackfunctie!
+			openConfirm: function () {
+				app.dialog.confirm('Voel je je goed vandaag?', function () {
+					// je kunt een dialog openen vanuit een andere dialog
+					app.dialog.alert('Geweldig!');
+				});
+			},
+			// login - een standaard loginvenster
+			openLogin: function () {
+				app.dialog.login('Gebruikersnaam en wachtwoord:', function (naam, ww) {
+					console.log('Gebruikersnaam:', naam, 'Wachtwoord:', ww);
+					// in werkelijkheid: username en ww naar backend sturen voor login.
+				})
+			},
+			openCustom: function () {
+				// zelfgemaakte dialog openen
+				// customDialog.open();
+			}
+		}
+	}
+
+</script>

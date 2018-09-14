@@ -1,0 +1,99 @@
+<!-- picker.html -->
+<template>
+	<div class="page" data-name="dialog">
+		<div class="navbar">
+			<div class="navbar-inner sliding">
+				<div class="left">
+					<a href="#" class="link back">
+						<i class="icon icon-back"></i>
+						<span class="ios-only">Back</span>
+					</a>
+				</div>
+				<div class="title">Picker</div>
+			</div>
+		</div>
+		<div class="page-content block">
+			<h1>Voorbeeld Picker</h1>
+			<p>
+				Picker is een krachtige component, waarbij je verschillende keuzes kunt maken uit een lijst.
+			</p>
+
+			<!-- Series picker -->
+			<div class="block-title">Kies je favoriete serie:</div>
+			<div class="item-content item-input">
+				<div class="item-inner">
+					<div class="item-input-wrap margin-left">
+						<input type="text" placeholder="serie" readonly="readonly" id="picker-serie" />
+					</div>
+				</div>
+			</div>
+
+			<!-- Afspraak picker -->
+			<div class="block-title">Kies tijdstip voor afspraak:</div>
+			<div class="item-content item-input">
+				<div class="item-inner">
+					<div class="item-input-wrap margin-left">
+						<input type="text" placeholder="tijd..." readonly="readonly" id="picker-afspraak" />
+					</div>
+				</div>
+			</div>
+
+			<!-- Bevestigen -->
+			<button class="button button-raised" id="btnBevestig">Bevestigen</button>
+		</div><!-- /page-content -->
+	</div>
+</template>
+<script>
+	return {
+		on: {
+			pageInit: function (e, page) {
+				var self = this; // caching van variabele 'this'				
+				// Series Device picker
+				self.pickerSerie = app.picker.create({
+					inputEl: '#picker-serie',
+					cols: [
+						{
+							textAlign: 'center',
+							values: ['House of Cards', 'The Bridge', 'Unforgiven', 'Game of Thrones', 'The Walking Dead', 'Saturday Night Live', 'Westworld', 'Greys anatomy']
+						}
+					]
+				});
+				// Afspraak picker
+				self.pickerAfspraak = app.picker.create({
+					inputEl: '#picker-afspraak',
+					cols: [
+						{
+							textAlign: 'left',
+							values: ['8', '9', '10', '11', '12', '13', '14', '15', '16', '17']
+						},
+						{
+							values: ['00', '15', '30', '45']
+						}
+					],
+					openIn: 'popover'
+				})
+
+				// Knop Bevestig, eerst variabelen ophalen
+				var $$ = Dom7; // referentie naar Dom7 (de 'jQuery' van Framework7) ophalen
+				var btnBevestig = $$('#btnBevestig');
+				var pickerSerie = $$('#picker-serie')
+				var pickerAfspraak = $$('#picker-afspraak')
+				btnBevestig.on('click', function () {
+					app.dialog.alert(
+						'Serie: ' + pickerSerie.val() + '<br>Afspraak: ' + pickerAfspraak.val(),
+						'Samenvatting')
+						.open();
+
+				})
+
+			},
+			pageBeforeRemove: function () {
+				// Variabelen vernietigen, om memory leak te voorkomen.
+				var self = this;
+				self.pickerSerie.destroy();
+				self.pickerAfspraak.destroy();
+			}
+		}
+	}
+
+</script>
