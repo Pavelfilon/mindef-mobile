@@ -1,0 +1,54 @@
+<!-- ajax.html -->
+<template>
+    <div class="page" data-name="detail">
+        <div class="navbar">
+            <div class="navbar-inner sliding">
+                <div class="left">
+                    <a href="#" class="link back">
+                        <i class="icon icon-back"></i>
+                        <span class="ios-only">Back</span>
+                    </a>
+                </div>
+                <div class="title">Ajax - detail</div>
+            </div>
+        </div>
+        <div class="page-content block">
+            <h1>Detail</h1>
+            <p>
+                In deze pagina wordt de Open Movie Database gebruikt, op <a href="http://www.omdbapi.com/">http://www.omdbapi.com/</a>
+            </p>
+            <div>
+                details ophalen voor: {{ $route.params.id }}
+            </div>
+
+        </div><!-- /page-content -->
+    </div>
+</template>
+<script>
+    return {
+        data: function () {
+            return {
+                url: 'http://www.omdbapi.com/?apikey=f1f56c8e&'
+            }
+        },
+
+        on: {
+            pageInit: function () {
+                console.log('In pageInit voor detail page');
+
+                var self = this;
+                var $$ = Dom7;
+                var id = this.$route.params.id;
+                var url = self.url + 'i=' + id;
+
+                app.request.get(url, function (data) {
+                    var details = JSON.parse(data)
+                    self.details = details;
+                    console.log(self.details);
+                    // Hier: template met details samenstellen toevoegen aan de pagina.
+                })
+            }
+        }
+    }
+
+</script>
