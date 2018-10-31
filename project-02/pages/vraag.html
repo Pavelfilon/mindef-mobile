@@ -1,6 +1,5 @@
 <template>
     <div class="page">
-
         <div class="navbar">
             <div class="navbar-inner sliding">
                 <div class="left">
@@ -17,7 +16,7 @@
             <h2>Vraag 1</h2>
             <div class="row">
                 <div class="col-50">
-                    <p class="vraag"></p>
+                    <p id="vraag"></p>
                 </div>
                 <div class="col-50">
                     <img id="afbeelding" src="" alt="het voertuig" class="responsive">
@@ -37,7 +36,9 @@
                     <h2>Feedback</h2>
                     <h2 id="feedback"></h2>
                     <p id="feedbackTekst"></p>
-                    <a hidden href="#" id="btnNext" class="button button-fill color-blue">Volgende vraag</a>
+                    <a href="#" id="btnNext" class="button button-fill color-blue">Volgende vraag</a>
+                    <h3>Resultaat</h3>
+                    <div id="divResult"></div>
                 </div>
             </div>
         </div>
@@ -45,8 +46,11 @@
 
 </template>
 <script>
+    // 0. Variabelen in deze pagina
     var $$ = Dom7;
-    var index = 0
+    var index = 0;
+    var score = 0;
+    var antwoord = '';
     var vragen = [
         {
             id: 1,
@@ -55,41 +59,92 @@
             antwoord: 'G',
             feedbackTekstGoed: 'Dit is een amfibievoertuig. Het kan op het water en op het land worden gebruikt',
             feedbackTekstFout: 'Helaas. Dit is een amfibievoertuig. Deze zijn geschikt voor water en op het land.'
+        },
+        {
+            id: 2,
+            tekst: 'Een pizza Quattro Stagione bevat vijf soorten kaas.',
+            afbeelding: '../img/pizza-01.jpg',
+            antwoord: 'F',
+            feedbackTekstGoed: 'Correct. Een pizza Quattro Stagione bevat vier soorten kaas, geen vijf.',
+            feedbackTekstFout: 'Helaas. Een pizza Quattro Stagione bevat vier soorten gaas. Geen vijf.'
+        },
+        {
+            id: 3,
+            tekst: 'De maximale salarisschaal bij Defensie is schaal 12.',
+            afbeelding: '../img/salaris-01.jpg',
+            antwoord: 'F',
+            feedbackTekstGoed: 'Correct. Na xxx-dienstjaren kom je in schaal 12.',
+            feedbackTekstFout: 'Helaas. De maximale schaal is Schaal 16, al is dat niet voor iedereen weggelegd.'
         }
     ]
+
+    // Functie om de vraag op scherm te tonen
+    function stelVraag(index) {
+        $$('#vraag').text(vragen[index].tekst)
+        $$('#afbeelding').attr('src', vragen[index].afbeelding);
+
+        $$('#btnGoed').on('click', function () {
+            if (vragen[index].antwoord === 'G') {
+                $$('#feedback').text('Goed!')
+                $$('#feedbackTekst').text(vragen[index].feedbackTekstGoed)
+                antwoord = 'G'
+
+            } else {
+                $$('#feedback').text('Fout')
+                $$('#feedbackTekst').text(vragen[index].feedbackTekstFout)
+                antwoord = 'F'
+            }
+        })
+
+        $$('#btnFout').on('click', function () {
+            if (vragen[index].antwoord === 'G') {
+                $$('#feedback').text('Fout')
+                $$('#feedbackTekst').text(vragen[index].feedbackTekstFout)
+                antwoord = 'F'
+            } else {
+                $$('#feedback').text('Goed!')
+                $$('#feedbackTekst').text(vragen[index].feedbackTekstGoed)
+                antwoord = 'G'
+            }
+        })
+    }
+
+    // Functie om eindresultaat te tonen
+    function toonResultaat() {
+        if (score > 2) {
+            $$('#divResult').text(score + ' goed, Je bent geslaagd!')
+        } else {
+            $$('#divResult').text(score + ' goed, Je bent gezakt!')
+        }
+    }
+
+    // Retourneer het Component-object met pageInit e.d.
     return {
         on: {
             pageInit: function () {
-                $$('.vraag').text(vragen[index].tekst)
-                $$('#afbeelding').attr('src', vragen[index].afbeelding);
-
-                $$('#btnGoed').on('click', function () {
-                    if (vragen[index].antwoord === 'G') {
-                        $$('#feedback').text('Goed!')
-                        $$('#feedbackTekst').text(vragen[index].feedbackTekstGoed)
-
-                    } else {
-                        $$('#feedback').text('Fout')
-                        $$('#feedbackTekst').text(vragen[index].feedbackTekstFout)
-                    }
-                })
-
-                $$('#btnFout').on('click', function () {
-                    if (vragen[index].antwoord === 'G') {
-                        $$('#feedback').text('Fout')
-                        $$('#feedbackTekst').text(vragen[index].feedbackTekstFout)
-
-                    } else {
-                        $$('#feedback').text('Goed!')
-                        $$('#feedbackTekst').text(vragen[index].feedbackTekstGoed)
-                    }
-                })
+                score = 0;
+                stelVraag(index);
 
                 $$('#btnNext').on('click', function () {
+                    // reset vraag/antwoord tekst
+                    $$('#feedback').text('');
+                    $$('#feedbackTekst').text('');
+                    if (antwoord === 'G') {
+                        // Het antwoord was goed, ga de score ophogen.
+                        score += 1;
+                        console.log(score);
+                    }
                     index = index + 1;
-
+                    if (index > vragen.length - 1) {
+                        index = 0;
+                        // straks: ga naar resultaat
+                        toonResultaat(score);
+                    } else {
+                        stelVraag(index)
+                    }
                 })
-            }
+
+            }// end pageInit
         }
     }
 </script>
