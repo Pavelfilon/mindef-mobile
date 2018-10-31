@@ -36,6 +36,12 @@ De pagina/component bestaat uit
 					<button class="col button button-raised" @click="openCustom">Zelfgemaakt</button>
 				</div>
 			</div>
+			<!-- Nieuwe rij, Knop met beslisboom-dialoog -->
+			<div class="row">
+				<div class="col">
+					<button class="col button button-raised" @click="openBeslissing">Beslis-boom</button>
+				</div>
+			</div>
 		</div>
 	</div>
 </template>
@@ -46,29 +52,66 @@ De pagina/component bestaat uit
 	// Voor opties en mogelijkheden, zie de documentatie op https://framework7.io/docs/dialog.html
 	// *************************
 	// 1. Parameters instellen.
-	// var parameters = {
-	// 	title: 'Zelfgemaakte dialog',
-	// 	content: 'Houd jij van pizza?',
-	// 	buttons: [
-	// 		{
-	// 			text: 'Nee'
-	// 		},
-	// 		{
-	// 			text: 'Ja'
-	// 		},
-	// 		{
-	// 			text: 'Op zondag',
-	// 			keyCodes: [13],
-	// 			onClick: function () {
-	// 				app.dialog.alert('Geweldig! Nu op zondag aanbiedingen bij Pizza Hut!');
-	// 			}
-	// 		},
+	var parameters = {
+		title: 'Zelfgemaakte dialog',
+		content: 'Houd jij van pizza?',
+		buttons: [
+			{
+				text: 'Nee'
+			},
+			{
+				text: 'Ja',
+				onClick: function () {
+					console.log('OK, Bedankt voor je antwoord.Probeer het ook eens op zondag');
+				}
+			},
+			{
+				text: 'Op zondag',
+				keyCodes: [13],
+				onClick: function () {
+					app.dialog.alert('Geweldig! Nu op zondag aanbiedingen bij Pizza Hut!');
+				}
+			},
 
-	// 	]
-	// };
-	// // 2. De dialog maken. Hij wordt later, in de functie openCustom() aangeroepen/geopend.
-	// var customDialog = app.dialog.create(parameters)
+		]
+	};
+	// 2. De dialog maken. Hij wordt later, in de functie openCustom() aangeroepen/geopend.
+	var customDialog = app.dialog.create(parameters)
 	//#endregion Custom Dialog
+
+	// Custom dialoog - beslisboom, hier met inline parameters!
+	// Er wordt gebruik gemaakt van app.router.navigate om naar de
+	// gewenste pagina te springen. Teken dit eventueel eerst zelf in 
+	// een flow-chart
+	var beslisDialog = app.dialog.create({
+		title: 'Waar wil je naar toe?',
+		content: 'Neem een beslissing',
+		buttons: [
+			{
+				text: 'Home',
+				onClick: function () {
+					app.router.navigate('/')
+				}
+			},
+			{
+				text: 'Quiz',
+				onClick: function () {
+					app.router.navigate('/vraag/')
+				}
+			},
+			{
+				text: 'Picker',
+
+				onClick: function () {
+					app.router.navigate('/picker/')
+				}
+			},
+
+		],
+		closeByBackdropClick: true
+	})
+
+	// Het return-object voor deze pagina.
 	return {
 		methods: {
 			// standaard alert-venster
@@ -91,7 +134,10 @@ De pagina/component bestaat uit
 			},
 			openCustom: function () {
 				// zelfgemaakte dialog openen
-				// customDialog.open();
+				customDialog.open();
+			},
+			openBeslissing: function () {
+				beslisDialog.open()
 			}
 		}
 	}

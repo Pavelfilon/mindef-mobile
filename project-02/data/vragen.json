@@ -1,0 +1,26 @@
+[
+    {
+        "id": 1,
+        "tekst": "Het voertuig hiernaast wordt zowel op het land als in het water gebruikt.",
+        "afbeelding": "../img/voertuig-01.jpg",
+        "antwoord": "G",
+        "feedbackTekstGoed": "Dit is een amfibievoertuig. Het kan op het water en op het land worden gebruikt",
+        "feedbackTekstFout": "Helaas. Dit is een amfibievoertuig. Deze zijn geschikt voor water en op het land."
+    },
+    {
+        "id": 2,
+        "tekst": "Een pizza Quattro Stagione bevat vijf soorten kaas.",
+        "afbeelding": "../img/pizza-01.jpg",
+        "antwoord": "F",
+        "feedbackTekstGoed": "Correct. Een pizza Quattro Stagione bevat vier soorten kaas, geen vijf.",
+        "feedbackTekstFout": "Helaas. Een pizza Quattro Stagione bevat vier soorten gaas. Geen vijf."
+    },
+    {
+        "id": 3,
+        "tekst": "De maximale salarisschaal bij Defensie is schaal 12.",
+        "afbeelding": "../img/salaris-01.jpg",
+        "antwoord": "F",
+        "feedbackTekstGoed": "Correct. Na xxx-dienstjaren kom je in schaal 12.",
+        "feedbackTekstFout": "Helaas. De maximale schaal is Schaal 16, al is dat niet voor iedereen weggelegd."
+    }
+]
