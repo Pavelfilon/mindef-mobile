@@ -37,10 +37,13 @@
                 // Stap 2. Stop de gauge in een variabele,
                 // zodat je hem later kunt gaan updaten...
 
-                // Stap 2a. Haal de huidige waarde uit sessionStorage
-                var currentValue = window.localStorage.getItem('gauge-value') ?
-                    window.localStorage.getItem('gauge-value')
-                    : 0.3;
+                // Stap 2a. Haal de huidige waarde uit localStorage
+                var currentValue;
+                if (window.localStorage.getItem('gauge-value')) {
+                    currentValue = window.localStorage.getItem('gauge-value')
+                } else {
+                    currentValue = 0.3;
+                }
 
                 // Stap 2b. Maak de gauge
                 gauge = app.gauge.create({
