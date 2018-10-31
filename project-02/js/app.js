@@ -10,6 +10,10 @@ var app = new Framework7({
             componentUrl: './pages/gauge.html'
         },
         {
+            path: '/timer/',
+            componentUrl: './pages/timer.html'
+        },
+        {
             path: '/dialog/',
             componentUrl: './pages/dialog.html'
         },
