@@ -6,8 +6,8 @@ var app = new Framework7({
     routes: [
         // <-- Routes/pagina's binnen de app
         {
-            path: '/about/',
-            url: './pages/about.html'
+            path: '/gauge/',
+            componentUrl: './pages/gauge.html'
         },
         {
             path: '/dialog/',

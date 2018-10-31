@@ -1,0 +1,62 @@
+<template>
+    <div class="page">
+        <div class="navbar">
+            <div class="navbar-inner sliding">
+                <div class="left">
+                    <a href="#" class="link back">
+                        <i class="icon icon-back"></i>
+                        <span class="ios-only">Back</span>
+                    </a>
+                </div>
+                <div class="title">Gauge component</div>
+            </div>
+        </div>
+        <div class="page-content block  ">
+            <h2>Een Gauge component</h2>
+
+            <hr>
+            <div class="gauge my-gauge"></div>
+            <hr>
+            <div class="block-title">Verbruik</div>
+
+
+            <!-- range slider -->
+            <div id="slider" class="range-slider range-slider-init">
+                <input type="range" min="0" max="100" step="1" value="50">
+            </div>
+            <h3>Slider value:</h3>
+            <div class="slider-value"></div>
+        </div>
+    </div>
+</template>
+<script>
+    var $$ = Dom7;
+    return {
+        on: {
+            pageInit: function () {
+                console.log('Page Init voor gauge');
+                var demoGauge = app.gauge.create({
+                    el: '.my-gauge',
+                    type: 'circle',
+                    value: 0.5,
+                    size: 250,
+                    borderColor: 'pink',
+                    borderBgColor: 'red',
+                    borderWidth: 10,
+                    valueText: '50%',
+                    valueFontSize: 41,
+                    valueTextColor: '#2196f3',
+                    labelText: 'salaris verbruikt',
+                });
+
+                $$('#slider').on('range:change', function (e, range) {
+                    $$('.slider-value').text(range.value);
+                    demoGauge.update({
+                        value: (range.value / 100),
+                        valueText: range.value + '%'
+                    });
+                });
+            }
+        }
+    }
+</script>

@@ -1,0 +1,83 @@
+<template>
+    <div class="page">
+
+        <div class="navbar">
+            <div class="navbar-inner sliding">
+                <div class="left">
+                    <a href="#" class="link back">
+                        <i class="icon icon-back"></i>
+                        <span class="ios-only">Back</span>
+                    </a>
+                </div>
+                <div class="title">Gauge component</div>
+            </div>
+        </div>
+        <div class="page-content block">
+            <h1>Mijn salarismeter</h1>
+            <div class="gauge salaris-gauge"></div>
+            <!-- range slider -->
+            <h2>Pas je salaris aan</h2>
+            <div id="salaris-slider" class="range-slider range-slider-init">
+                <input type="range" min="0" max="100" step="1" value="30">
+            </div>
+        </div>
+    </div>
+</template>
+<!-- Hier komt het script -->
+<script>
+
+    var $$ = Dom7; // Maak referentie naar Dom7, de jQuery-variant van FW7.
+    var gauge;
+
+    return {
+        on: {
+            // 1. Gebruik de pageInit-functie
+            pageInit: function () {
+                console.log('De gauge wordt geinitialiseerd');
+                // Stap 2. Stop de gauge in een variabele,
+                // zodat je hem later kunt gaan updaten...
+                var currentValue = window.sessionStorage.getItem('gauge-value') ?
+                    window.sessionStorage.getItem('gauge-value')
+                    : 0.3;
+                gauge = app.gauge.create({
+                    el: '.salaris-gauge',
+                    type: 'circle',
+                    value: currentValue, //0.3,
+                    size: 250,
+                    borderColor: '#2196f3',
+                    borderBgColor: 'pink',
+                    borderWidth: 20,
+                    valueText: currentValue * 100 + '%',
+                    valueFontSize: 41,
+                    valueTextColor: '#2196f3',
+                    labelText: 'Mijn salaris',
+                });
+
+                // Stap 3. Selecteer de slider en voeg functionaleit voor 'change' toe
+                $$('#salaris-slider').on('range:change', function (e, range) {
+                    console.log('Er is een wijziging in de range', range.value);
+                    // Stap4 - optioneel - Bereken de kleur. Als > 80%, dan moet de kleur rood zijn.
+                    var currentColor;
+                    if (range.value > 80) {
+                        currentColor = 'red'
+                    } else {
+                        currentColor = '#2196f3'
+                    }
+                    // Stap 5. Ga de gauge updaten
+                    gauge.update({
+                        value: (range.value / 100),
+                        valueText: range.value + '%',
+                        borderColor: currentColor
+                    });
+                })
+            },
+            pageBeforeRemove: function () {
+                console.log('Pagina met gauge wordt vernietigd');
+                window.sessionStorage.setItem('gauge-value', gauge.params.value)
+            }
+
+
+        }
+
+    }
+</script>

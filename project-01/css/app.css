@@ -3,6 +3,14 @@ img.responsive {
     max-width: 100%;
 }
 
+.color-theme-green {
+    /* nieuwe hex-codes voor jouw eigen GREEN thema */
+}
+
+.color-darkgreen {
+    color: darkgreen;
+}
+
 .demo-facebook-card .card-header {
     display: block;
     padding: 10px;
