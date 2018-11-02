@@ -1,0 +1,93 @@
+<template>
+    <div class="page">
+        <div class="navbar">
+            <div class="navbar-inner sliding">
+                <div class="left">
+                    <a href="#" class="link back">
+                        <i class="icon icon-back"></i>
+                        <span class="ios-only">Back</span>
+                    </a>
+                </div>
+                <div class="title">Maps Component</div>
+            </div>
+        </div>
+        <div class="page-content">
+            <div class="block">
+                <h1>Idem, in component </h1>
+                <div class="list">
+                    <ul>
+                        <li class="item-content item-input">
+                            <div class="item-inner">
+                                <div class="item-title item-label">Zoeken op plaatsnaam</div>
+                                <div class="item-input-wrap">
+                                    <input id="txtPlaatsComponent" type="text" value="Las Vegas, NV" placeholder="Plaats...">
+                                    <span class="input-clear-button"></span>
+                                </div>
+                            </div>
+                        </li>
+                    </ul>
+                    <button class="button button-fill color-green" @click="zoek">Zoek</button>
+                </div>
+            </div>
+            <!-- Placeholder voor Google Maps -->
+            <div id="map-component"></div>
+        </div>
+    </div>
+</template>
+<script>
+    // 0. console leegmaken, variabelen op deze pagina.
+    console.clear();
+    var address = "Las Vegas, NV";
+    var latitude;
+    var longitude;
+    var geocoder;
+    var map;
+
+    // 1. Private helper functions op deze pagina/component
+    function initMapComponent() {
+        console.clear();
+        console.log('Init Map Component, met address: ', address);
+
+        // 1a. Geocoder, adress omzetten naar coordinaten.
+        geocoder = new google.maps.Geocoder();
+
+        // 1b. Als er (nog) geen adres is, dit keer Las Vegas als standaard nemen.
+        // 1c. Adres omzetten
+        geocoder.geocode({ 'address': address }, function (results, status) {
+            if (status == google.maps.GeocoderStatus.OK) {
+                latitude = results[0].geometry.location.lat();
+                longitude = results[0].geometry.location.lng();
+                // 1d. Map updaten			
+                updateMapComponent({
+                    lat: latitude,
+                    lng: longitude
+                });
+            }
+        });
+    }
+    function updateMapComponent(coord) {
+        console.log('Update map, met address:', address, coord);
+        map = new google.maps.Map(document.getElementById('map-component'), {
+            center: coord,
+            zoom: 12
+        });
+        var marker = new google.maps.Marker({ position: coord, map: map });
+    }
+
+    // 2. Return object. Zie https://framework7.io/docs/router-component.html voor informatie
+    return {
+        on: {
+            pageInit: function () {
+                initMapComponent();
+            }
+        },
+        methods: {
+            zoek: function () {
+                // 2a. Tekstveld uitlezen met nieuwe plaats
+                address = $$('#txtPlaatsComponent').val();
+                // 2b. Map (opnieuw) initialiseren.
+                initMapComponent()
+            }
+        }
+    }
+</script>

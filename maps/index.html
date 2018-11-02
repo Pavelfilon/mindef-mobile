@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<!-- Required meta tags-->
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no, minimal-ui, viewport-fit=cover">
+	<meta name="apple-mobile-web-app-capable" content="yes">
+	<!-- Color theme for statusbar -->
+	<meta name="theme-color" content="#2196f3">
+	<!-- Your app title -->
+	<title>Demo Google Maps app</title>
+	<!-- Path to Framework7 Library CSS -->
+	<link rel="stylesheet" href="css/framework7.min.css">
+	<!-- Path to your custom app styles-->
+	<link rel="stylesheet" href="css/app.css">
+</head>
+
+<body class="color-theme-red">
+	<!-- App root element -->
+	<div id="app">
+		<!-- Statusbar overlay -->
+		<div class="statusbar"></div>
+
+		<!-- Your main view, should have "view-main" class -->
+		<div class="view view-main">
+			<!-- Initial Page, "data-name" contains page name -->
+			<div data-name="home" class="page">
+
+				<!-- Top Navbar -->
+				<div class="navbar">
+					<div class="navbar-inner">
+						<div class="title">Google Maps</div>
+					</div>
+				</div>
+
+				<!-- Toolbar -->
+
+				<!-- Scrollable page content -->
+				<div class="page-content">
+					<div class="block">
+						<h1>Google Maps demo</h1>
+						<div class="list">
+							<ul>
+								<li class="item-content item-input">
+									<div class="item-inner">
+										<div class="item-title item-label">Zoeken op plaatsnaam</div>
+										<div class="item-input-wrap">
+											<input id="txtPlaats" type="text" value="Amersfoort" placeholder="Plaats...">
+											<span class="input-clear-button"></span>
+										</div>
+									</div>
+								</li>
+							</ul>
+							<button class="button button-fill color-green" id="btnZoek">Zoek</button>
+						</div>
+					</div>
+					<!-- Placeholder voor Google Maps -->
+					<div id="map"></div>
+					<div class="block">
+						<hr>
+						<h2>Demo map op volgende pagina</h2>
+						<p>
+							De volgende pagina is in feite een component, met een &lt;template&gt; tag.
+						</p>
+						<p>De functionaliteit is verder gelijk, maar het resultaat komt op een andere manier tot stand</p>
+						<p>
+							<a href="/maps-component/" class="button button-fill color-green">Maps component</a>
+						</p>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	</div>
+	<!-- Path to Framework7 Library JS-->
+	<script type="text/javascript" src="js/framework7.min.js"></script>
+	<!-- Google Maps API. Use your own key, or else (temporary, please! this private key:AIzaSyBoeJLUsWjWGz1xYeeahUULqcF9U8I2TmY) -->
+
+	<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBoeJLUsWjWGz1xYeeahUULqcF9U8I2TmY&callback=initMap"
+	 async defer></script>
+	<!-- Path to your app js-->
+	<script type="text/javascript" src="js/app.js"></script>
+
+	<script>
+		// 0. Variabelen op de pagina
+		var address = "Amersfoort, NL";;
+		var latitude;
+		var longitude;
+		var geocoder;
+		var map;
+		var $$ = Dom7;
+		// 1. Callbackfunctie, initMap. Wordt aangeroepen zodra het Google Maps Script is geladen (zie <script> tag).
+		function initMap() {
+
+			// 1a. Geocoder, adress omzetten naar coordinaten.
+			geocoder = new google.maps.Geocoder();
+
+			// 1b. Als er (nog) geen adres is, Amersfoort als standaard nemen.
+			// 1c. Adres omzetten
+			geocoder.geocode({ 'address': address }, function (results, status) {
+				if (status == google.maps.GeocoderStatus.OK) {
+					latitude = results[0].geometry.location.lat();
+					longitude = results[0].geometry.location.lng();
+					// 1d. Map updaten			
+					updateMap({
+						lat: latitude,
+						lng: longitude
+					})
+				}
+			});
+		}
+
+		// 2. Map updaten
+		function updateMap(coord) {
+			console.log('Nieuwe coordinaten: ', coord);
+			map = new google.maps.Map(document.getElementById('map'), {
+				center: coord,
+				zoom: 12
+			});
+			var marker = new google.maps.Marker({ position: coord, map: map });
+		}
+
+		// 3. Knop Zoeken aanhaken. 
+		$$('#btnZoek').on('click', function () {
+			// 3a. Tekstveld uitlezen met nieuwe plaats
+			address = $$('#txtPlaats').val();
+			// 3b. Map opnieuw initialiseren.
+			initMap();
+		})
+	</script>
+</body>
+
+</html>
