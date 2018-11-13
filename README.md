@@ -8,3 +8,5 @@ Voorbeeldcode en slides bij training Mobile Apps, MinDef, najaar 2018
 -   Installatie-instructies Cordova op Windows: https://evothings.com/doc/build/cordova-install-windows.html
 -   Download Java JDK 1.8 U191: https://www.oracle.com/technetwork/java/javase/downloads/jdk8-downloads-2133151.html
 -   Accept de license agreements (als je hier een foutmelding over krijgt): https://stackoverflow.com/questions/39760172/you-have-not-accepted-the-license-agreements-of-the-following-sdk-components
+
+-   Whitelist plugin voor PhoneGap Build: https://stackoverflow.com/questions/33651646/phonegap-build-server-not-working-whitelist-plugin
