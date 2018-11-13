@@ -28,10 +28,30 @@ var app = new Framework7({
             path: '/content-block/',
             url: './pages/content-block.html'
         },
-        ,
         {
             path: '/color/',
             url: './pages/color.html'
+        },
+        {
+            path: '/ajax/',
+            componentUrl: './pages/ajax.html'
+        },
+        {
+            path: '/barcode/',
+            componentUrl: './pages/barcode.html'
+        },
+        {
+            path: '/voertuig1/',
+            url: './pages/voertuig1.html'
+        },
+
+        {
+            path: '/voertuig2/',
+            url: './pages/voertuig2.html'
+        },
+        {
+            path: '(.*)',
+            url: './pages/404.html'
         }
     ]
     // <-- overige parameters

@@ -1,0 +1,110 @@
+<!-- ajax.html -->
+<template>
+    <div class="page">
+        <div class="navbar">
+            <div class="navbar-inner sliding">
+                <div class="left">
+                    <a href="#" class="link back">
+                        <i class="icon icon-back"></i>
+                        <span class="ios-only">Back</span>
+                    </a>
+                </div>
+                <div class="title">Ajax</div>
+            </div>
+        </div>
+        <div class="page-content block">
+            <h1>Voorbeeld Movies</h1>
+            <p>
+                In deze pagina wordt de Open Movie Database gebruikt, op
+                <a href="http://www.omdbapi.com/">http://www.omdbapi.com/</a>
+            </p>
+            <div class="block-title">Zoeken op trefwoord:</div>
+            <div class="item-content item-input">
+                <div class="item-inner">
+                    <div class="item-input-wrap margin-left">
+                        <input
+                            type="text"
+                            placeholder="trefwoord films..."
+                            id="keyword"
+                        />
+                    </div>
+                    <button class="col button button-raised" @click="search">
+                        Zoek
+                    </button>
+                </div>
+                <div class="list links-list"><ul id="listResult"></ul></div>
+            </div>
+            <hr />
+            <h2>Resultaat van vragen.json</h2>
+            <button class="col button button-raised" @click="searchVragen">
+                Zoek Vragen
+            </button>
+            <div id="resultVragen"></div>
+        </div>
+        <!-- /page-content -->
+    </div>
+</template>
+<script>
+    var $$ = Dom7;
+
+    return {
+        data: function() {
+            return {
+                url: 'http://www.omdbapi.com/?apikey=f1f56c8e&'
+            };
+        },
+
+        methods: {
+            search: function() {
+                var self = this;
+                var $$ = Dom7;
+                var keyword = $$('#keyword').val();
+
+                // Stel dynamisch de url samen, met het keyword
+                var url = self.url + 's=' + keyword;
+                // Referentie ophalen naar de lijst.
+                var listResult = $$('#listResult');
+
+                // Voer de AJAX-call uit:
+                app.request.get(url, function(data) {
+                    var movies = JSON.parse(data);
+                    console.log(movies);
+                    movies.Search.forEach(function(item) {
+                        // NIEUW: 'backticks' om makkelijk meerregelige HTML-strings te maken.
+                        // Binnen de backticks kun je ${...} gebruiken om data te plaatsen
+                        var listItem = `
+                    					<li>
+                    						<div class="item-content">
+                    							<div class="item-media">
+                    								<img src="${item.Poster}" width="30">
+                    							</div>
+                    							<div class="item-inner">
+                    							<a href="#">
+                    							${item.Title}
+                    							</a>
+                    						</div>
+                    						</div>
+                    					</li>
+                    					`;
+                        listResult.append(listItem);
+                    });
+                });
+            },
+            searchVragen: function() {
+                // Zoek naar de vragen in het json-file
+                app.request.get(
+                    'http://localhost:5000/data/vragen.json',
+                    function(data) {
+                        console.log(data);
+                        var vragen = JSON.parse(data);
+                        console.log(vragen);
+                        vragen.forEach(function(vraag) {
+                            $$('#resultVragen').append(vraag.tekst);
+                            $$('#resultVragen').append('<br >');
+                        });
+                    }
+                );
+            }
+        }
+    };
+</script>

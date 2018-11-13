@@ -1,0 +1,65 @@
+<!-- ajax.html -->
+<template>
+    <div class="page">
+        <div class="navbar">
+            <div class="navbar-inner sliding">
+                <div class="left">
+                    <a href="#" class="link back">
+                        <i class="icon icon-back"></i>
+                        <span class="ios-only">Back</span>
+                    </a>
+                </div>
+                <div class="title">Barcode</div>
+            </div>
+        </div>
+        <div class="page-content block">
+            <h1>Voorbeeld Barcode scanner</h1>
+
+            <button class="col button button-raised" @click="scan">
+                Scan code
+            </button>
+            <div id="resultBarcode"></div>
+        </div>
+        <!-- /page-content -->
+    </div>
+</template>
+<script>
+    var $$ = Dom7;
+    document.addEventListener('deviceready', onDeviceReady, false);
+    function onDeviceReady() {}
+    return {
+        on: {},
+        methods: {
+            scan: function() {
+                console.log('scanning....');
+                cordova.plugins.barcodeScanner.scan(
+                    function(result) {
+                        console.log(
+                            'We got a barcode\n' +
+                                'Result: ' +
+                                result.text +
+                                '\n' +
+                                'Format: ' +
+                                result.format +
+                                '\n' +
+                                'Cancelled: ' +
+                                result.cancelled
+                        );
+                        if (result.format === 'QR_CODE') {
+                            // eerst testen of de pagina bestaat, zo ja:
+                            var route = '/' + result.text + '/';
+                            if (route)
+                                app.router.navigate('/' + result.text + '/');
+                            // so nee, toon foutmelding
+                        } else {
+                            alert('sorry, code niet bekend');
+                        }
+                    },
+                    function(error) {
+                        alert('Scanning failed: ' + error);
+                    }
+                );
+            }
+        }
+    };
+</script>
