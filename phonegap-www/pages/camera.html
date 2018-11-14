@@ -41,6 +41,10 @@
     </div>
 </template>
 <script>
+    // 0. variabelen op deze pagina
+    var db = window.localStorage;
+    var fotoArray = [];
+
     // 1. De callback die wordt uitgevoerd als foto maken goed ging
     function cameraSuccess(data) {
         document.getElementById('imgPhoto').src = data;
@@ -57,10 +61,29 @@
         cameraDirection: 1,
         saveToPhotoAlbum: true
     };
+
+    function voegFotoToe(data) {
+        var nieuweFoto = `
+                 <p><img src="${data}" class="responsive"></p>
+                <p>locatie: ${data}</p>
+            `;
+        $$('#result').append(nieuweFoto);
+    }
     var $$ = Dom7;
     return {
         on: {
-            pageInit: function() {}
+            pageInit: function() {
+                var data = db.getItem('fotos');
+                if (data) {
+                    // er zijn al foto's gevonden
+                    fotoArray = data.split(',');
+                    fotoArray.forEach(function(foto) {
+                        voegFotoToe(foto);
+                    });
+                } else {
+                    $$('#result').text('maak uw eerste foto');
+                }
+            }
         },
         methods: {
             getphoto: function() {
@@ -71,17 +94,20 @@
                 );
             },
             getphotolibrary: function() {
+                // Nieuwe opties, nu om foto uit de library te halen.
                 var cameraOptionsLibrary = {
                     sourceType: navigator.camera.PictureSourceType.PHOTOLIBRARY,
                     correctOrientation: true
                 };
 
+                // Nieuwe success-functie, om meerdere foto's onder elkaar te plaatsen.
                 function cameraSuccessLibrary(data) {
-                    var nieuweFoto = `
-                        <p><img src="${data}" class="responsive"></p>
-                        <p>locatie: ${data}</p>
-                        `;
-                    $$('#result').append(nieuweFoto);
+                    voegFotoToe(data);
+                    // Toegevoegde foto opslaan in localStorage zodat je hem weer kunt laden als de
+                    // pagina opnieuw wordt opgehaald.
+                    // Ik maak hiervoor een nieuwe variabele  (van 'database')
+                    fotoArray.push(data);
+                    window.localStorage.setItem('fotos', fotoArray.toString());
                 }
                 navigator.camera.getPicture(
                     cameraSuccessLibrary,
