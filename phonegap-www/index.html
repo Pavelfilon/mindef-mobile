@@ -100,6 +100,18 @@
                             href="/barcode/"
                             >Barcode scannen</a
                         >
+                        <a
+                            class="button button-small button-fill button-round"
+                            href="/camera/"
+                            >Foto maken</a
+                        >
+                        <!--
+                            <a
+                                class="button button-small button-fill button-round"
+                                href="/download/"
+                                >Download</a
+                            >
+                        -->
 
                         <h2 id="deviceInfo"></h2>
                     </div>
@@ -115,13 +127,9 @@
             document.addEventListener('deviceready', onDeviceReady, false);
             function onDeviceReady() {
                 console.log(device.cordova);
-                document.getElementById('deviceInfo').innerHTML = `toestel :
-                                                                                                                                                                                       
-                                                                                                                                                    ${
-                                                                                                                                                        device.manufacturer
-                                                                                                                                                    } ${
-                    device.model
-                }`;
+                document.getElementById('deviceInfo').innerHTML = `toestel ${
+                    device.manufacturer
+                } ${device.model}`;
 
                 if (device.platform === 'android') {
                     //doe specifieke android dingen
