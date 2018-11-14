@@ -1,0 +1,65 @@
+<!-- camera.html -->
+<template>
+    <div class="page">
+        <div class="navbar">
+            <div class="navbar-inner sliding">
+                <div class="left">
+                    <a href="#" class="link back">
+                        <i class="icon icon-back"></i>
+                        <span class="ios-only">Back</span>
+                    </a>
+                </div>
+                <div class="title">Camera</div>
+            </div>
+        </div>
+        <div class="page-content block">
+            <h1>Voorbeeld Camera</h1>
+
+            <button
+                class="col button button-raised button-red"
+                @click="getphoto"
+            >
+                Take picture
+            </button>
+            <hr />
+            <div id="result">
+                <img
+                    id="imgPhoto"
+                    src=""
+                    class="responsive"
+                    alt="hier komt de foto..."
+                />
+            </div>
+        </div>
+        <!-- /page-content -->
+    </div>
+</template>
+<script>
+    // 1. De callback die wordt uitgevoerd als foto maken goed ging
+    function cameraSuccess(data) {
+        document.getElementById('imgPhoto').src = data;
+    }
+
+    // 2. de callback die wordt uitgevoerd als er een fout is opgetreden
+    function cameraFail(error) {
+        alert('Foto maken ging fout: ' + error);
+    }
+
+    // 3. De opties voor de camera. In eerste instantie alleen de standaardwaarden (=leeg object)
+    var cameraOptions = {};
+
+    return {
+        on: {
+            pageInit: function() {}
+        },
+        methods: {
+            getphoto: function() {
+                navigator.camera.getPicture(
+                    cameraSuccess,
+                    cameraFail,
+                    cameraOptions
+                );
+            }
+        }
+    };
+</script>

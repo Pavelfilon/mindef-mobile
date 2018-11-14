@@ -49,6 +49,11 @@ var app = new Framework7({
             path: '/voertuig2/',
             url: './pages/voertuig2.html'
         },
+
+        {
+            path: '/camera/',
+            componentUrl: './pages/camera.html'
+        },
         {
             path: '(.*)',
             url: './pages/404.html'
