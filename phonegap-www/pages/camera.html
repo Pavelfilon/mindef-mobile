@@ -35,6 +35,8 @@
                     class="responsive"
                     alt="hier komt de foto..."
                 />
+                <p id="lat"></p>
+                <p id="long"></p>
             </div>
         </div>
         <!-- /page-content -->
@@ -44,10 +46,16 @@
     // 0. variabelen op deze pagina
     var db = window.localStorage;
     var fotoArray = [];
+    var $$ = Dom7;
+    var photoName;
 
     // 1. De callback die wordt uitgevoerd als foto maken goed ging
     function cameraSuccess(data) {
         document.getElementById('imgPhoto').src = data;
+        photoName = data;
+        // OP dit moment, geolocatiedata gaan ophalen en tonen bij de foto
+        // Hiervoor wordt de geolocation-plugin gebruikt.
+        navigator.geolocation.getCurrentPosition(onGeoSuccess, onGeoError);
     }
 
     // 2. de callback die wordt uitgevoerd als er een fout is opgetreden
@@ -62,14 +70,41 @@
         saveToPhotoAlbum: true
     };
 
+    // 4. Foto uit de array in een loop op de pagina tonen.
     function voegFotoToe(data) {
         var nieuweFoto = `
-                 <p><img src="${data}" class="responsive"></p>
-                <p>locatie: ${data}</p>
-            `;
+                                                                         <p><img src="${data}" class="responsive"></p>
+                                                                        <p>locatie: ${data}</p>
+                                                                    `;
         $$('#result').append(nieuweFoto);
     }
-    var $$ = Dom7;
+
+    // 5. Geolocation success function
+    function onGeoSuccess(position) {
+        // 5a. Haal coordinaten op uit het geretourneerde position-object
+        var lat = position.coords.latitude;
+        var long = position.coords.longitude;
+        // 5b. Plaats coordinaten in de pagina
+        $$('#lat').text(lat);
+        $$('#long').text(long);
+
+        // 5c - optioneel: op dit moment zijn zowel de fotonaam als de coordinaten
+        // bekend. Ga nu een object maken om een foto te beschrijven en eventueel
+        // op te slaan in localstorage. Dat wordt zoiets als
+        // var fotoObject = {
+        //     name: photoName,
+        //     lat: lat,
+        //     long: long
+        // };
+        // fotoArray.push(fotoObject)
+        // fotoarray opslaan in localStorage
+    }
+
+    // 6. Geolocation error function
+    function onGeoError(err) {
+        alert('FOUT: ' + JSON.stringify(err));
+    }
+
     return {
         on: {
             pageInit: function() {
@@ -107,13 +142,18 @@
                     // pagina opnieuw wordt opgehaald.
                     // Ik maak hiervoor een nieuwe variabele  (van 'database')
                     fotoArray.push(data);
-                    window.localStorage.setItem('fotos', fotoArray.toString());
+                    db.setItem('fotos', fotoArray.toString());
                 }
                 navigator.camera.getPicture(
                     cameraSuccessLibrary,
                     cameraFail,
                     cameraOptionsLibrary
                 );
+            },
+            verwijder: function(foto) {
+                var index = fotoArray.indexOf(foto);
+                fotoArray.splice(index, 1);
+                db.setItem('fotos', fotoArray.toString());
             }
         }
     };

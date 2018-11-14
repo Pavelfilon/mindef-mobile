@@ -1,0 +1,137 @@
+<!-- camera.html -->
+<template>
+    <div class="page">
+        <div class="navbar">
+            <div class="navbar-inner sliding">
+                <div class="left">
+                    <a href="#" class="link back">
+                        <i class="icon icon-back"></i>
+                        <span class="ios-only">Back</span>
+                    </a>
+                </div>
+                <div class="title">Download</div>
+            </div>
+        </div>
+        <div class="page-content block">
+            <h1>Voorbeeld Download video en opslaan</h1>
+
+            <button class="col button button-raised color-red" @click="delete">
+                delete
+            </button>
+            <hr />
+            <div id="result"></div>
+        </div>
+        <!-- /page-content -->
+    </div>
+</template>
+<script>
+    // 0. Variabelen in deze pagina
+    // 0a. The directory to store data
+    var store;
+
+    //0b. gebruikt voor korte status updates in de UI
+    var result;
+
+    //0c. URL van de video (nu: 1 video. In werkelijkheid: een array van video's!)
+    var assetURL = 'http://www.kassenaar.nl/video/video1_20mb.mp4';
+
+    //0d. Filename zoals de video lokaal wordt opgeslagen. Ook dit: dynamisch maken in echte app.
+    var fileName = 'video1.mp4';
+
+    // 1. Returnobject voor Framework7-componenten
+    return {
+        on: {
+            pageInit: function() {
+                result = document.getElementById('result');
+
+                result.innerHTML = 'Checking for video file.';
+
+                // Opslaan: in de data-directory voor deze app.
+                store = cordova.file.dataDirectory;
+
+                // Stap 1. Onderzoek of bestand al bestaat binnen de app
+                window.resolveLocalFileSystemURL(
+                    store + fileName,
+                    appStart, // als file al bestaat - starten
+                    downloadAsset // als file nog niet bestaat - downloaden
+                );
+
+                // 2. File niet gevonden, eerst downloaden
+                function downloadAsset() {
+                    var fileTransfer = new FileTransfer();
+                    console.log('About to start transfer');
+                    result.innerHTML +=
+                        '<p>Video bestaat nog niet - beginnen met downloaden</p>';
+                    fileTransfer.download(
+                        assetURL,
+                        store + fileName,
+                        function(entry) {
+                            console.log('Download Success!', entry);
+                            result.innerHTML = '<p>Downloaden gereed</p>';
+                            // downloaden klaar, nu gaan afspelen
+                            appStart();
+                        },
+                        function(err) {
+                            console.log('Error');
+                            console.dir(err);
+                            result.innerHTML =
+                                '<p>Downloaden ging helaas fout</p>';
+                            alert('Downloaden is fout gegaan...');
+                        }
+                    );
+                }
+
+                // 3. Bestand afspelen. Wordt aangeroepen als het bestand al bestaat, of na het downloaden.
+                function appStart() {
+                    // Video afspelen.
+                    window.plugins.streamingMedia.playVideo(store + fileName);
+                    result.innerHTML += '<p>Video afspelen: </p>';
+                    result.innerHTML += '<p>' + store + fileName + '</p>';
+                }
+            }
+        },
+        methods: {
+            ///******************
+            ///LET OP: WERKT NOG NIET!! TODO....
+            ///******************
+            delete: function() {
+                // Video verwijderen uit lokale bestandssysteem
+                console.log('Ga bestand verwijderen', fileName);
+                window.requestFileSystem(
+                    LocalFileSystem.PERSISTENT,
+                    0,
+                    function(fs) {
+                        // get the file named "video1.mp4"
+                        console.log(fs);
+                        debugger;
+                        fs.root.getFile(fileName, { create: false }, function(
+                            fileEntry
+                        ) {
+                            // attempt to remove the file if it exists
+                            debugger;
+                            fileEntry.remove(
+                                function(file) {
+                                    // delete successful
+                                    console.info(
+                                        'Video file has been deleted successfully.'
+                                    );
+                                    alert(file + 'removed');
+                                },
+                                function(error) {
+                                    // delete failed
+                                    console.error(
+                                        'Could not delete Video  file. ' +
+                                            JSON.stringify(error)
+                                    );
+                                }
+                            );
+                        });
+                    },
+                    function(err) {
+                        alert('error', err);
+                    }
+                );
+            }
+        }
+    };
+</script>
