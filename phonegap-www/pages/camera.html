@@ -21,6 +21,12 @@
             >
                 Take picture
             </button>
+            <button
+                class="col button button-raised button-red"
+                @click="getphotolibrary"
+            >
+                PhotoLibrary
+            </button>
             <hr />
             <div id="result">
                 <img
@@ -46,8 +52,12 @@
     }
 
     // 3. De opties voor de camera. In eerste instantie alleen de standaardwaarden (=leeg object)
-    var cameraOptions = {};
-
+    var cameraOptions = {
+        correctOrientation: true,
+        cameraDirection: 1,
+        saveToPhotoAlbum: true
+    };
+    var $$ = Dom7;
     return {
         on: {
             pageInit: function() {}
@@ -58,6 +68,25 @@
                     cameraSuccess,
                     cameraFail,
                     cameraOptions
+                );
+            },
+            getphotolibrary: function() {
+                var cameraOptionsLibrary = {
+                    sourceType: navigator.camera.PictureSourceType.PHOTOLIBRARY,
+                    correctOrientation: true
+                };
+
+                function cameraSuccessLibrary(data) {
+                    var nieuweFoto = `
+                        <p><img src="${data}" class="responsive"></p>
+                        <p>locatie: ${data}</p>
+                        `;
+                    $$('#result').append(nieuweFoto);
+                }
+                navigator.camera.getPicture(
+                    cameraSuccessLibrary,
+                    cameraFail,
+                    cameraOptionsLibrary
                 );
             }
         }
