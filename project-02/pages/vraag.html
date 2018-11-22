@@ -44,7 +44,6 @@
                     <h2 id="feedback"></h2>
                     <p id="feedbackTekst"></p>
                     <button
-                        href="#"
                         id="btnNext"
                         class="button button-fill color-blue disabled"
                     >
@@ -96,7 +95,7 @@
                 'Helaas. De maximale schaal is Schaal 16, al is dat niet voor iedereen weggelegd.'
         }
     ];
-
+    var review = [];
     // Functie om de vraag op scherm te tonen
     function stelVraag(index) {
         $$('#vraag').text(vragen[index].tekst);
@@ -171,8 +170,14 @@
                     if (index > vragen.length - 1) {
                         index = 0;
                         // vragen zijn afgelopen, toon het resultaat
-                        toonResultaat(score);
+                        toonResultaat(score); // Dit nog gaan uitbreiden!
+
+                        // Maak alle knoppen inactief.
+                        $$('#btnGoed, #btnFout, #btnNext').addClass('disabled');
+
+                        // Bijvoorbeeld Toon een eindboodschap oid.
                     } else {
+                        // Er zijn nog vragen over. Stel volgende vraag.
                         stelVraag(index);
                     }
                 });
