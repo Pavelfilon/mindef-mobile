@@ -49,6 +49,14 @@
 	</script>
 	<!-- Path to your app js-->
 	<script type="text/javascript" src="js/app.js"></script>
+	<script>
+	var $$ = Dom7;
+	// als niet automatisch naar de maps-component
+	// wordt gesprongen, dan een klikevent simuleren.
+	// $$('#btnGotoMaps').trigger('click');
+	this.$f7.mainView.router.load({url: "/maps-component/"})
+
+	</script>
 </body>
 
 </html>
