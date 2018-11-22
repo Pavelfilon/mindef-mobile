@@ -8,42 +8,54 @@
                         <span class="ios-only">Back</span>
                     </a>
                 </div>
-                <div class="title">Gauge component</div>
+                <div class="title">Quiz component</div>
             </div>
         </div>
         <div class="page-content block">
             <h1>Vraag/Antwoord</h1>
             <h2>Vraag 1</h2>
             <div class="row">
+                <div class="col-50"><p id="vraag"></p></div>
                 <div class="col-50">
-                    <p id="vraag"></p>
-                </div>
-                <div class="col-50">
-                    <img id="afbeelding" src="" alt="het voertuig" class="responsive">
+                    <img
+                        id="afbeelding"
+                        src=""
+                        alt="het voertuig"
+                        class="responsive"
+                    />
                 </div>
             </div>
             <div class="row">
                 <div class="col-50">
-                    <a href="#" id="btnGoed" class="button button-fill color-green">Goed</a>
+                    <button id="btnGoed" class="button button-fill color-green">
+                        Goed
+                    </button>
                 </div>
                 <div class="col-50">
-                    <a href="#" id="btnFout" class="button button-fill color-red">Fout</a>
+                    <button id="btnFout" class="button button-fill color-red">
+                        Fout
+                    </button>
                 </div>
             </div>
             <div class="row">
                 <div class="col-100">
-                    <hr>
+                    <hr />
                     <h2>Feedback</h2>
                     <h2 id="feedback"></h2>
                     <p id="feedbackTekst"></p>
-                    <a href="#" id="btnNext" class="button button-fill color-blue">Volgende vraag</a>
+                    <button
+                        href="#"
+                        id="btnNext"
+                        class="button button-fill color-blue disabled"
+                    >
+                        Volgende vraag
+                    </button>
                     <h3>Resultaat</h3>
                     <div id="divResult"></div>
                 </div>
             </div>
         </div>
     </div>
-
 </template>
 <script>
     // 0. Variabelen in deze pagina
@@ -54,97 +66,117 @@
     var vragen = [
         {
             id: 1,
-            tekst: 'Het voertuig hiernaast wordt zowel op het land als in het water gebruikt.',
+            tekst:
+                'Het voertuig hiernaast wordt zowel op het land als in het water gebruikt.',
             afbeelding: '../img/voertuig-01.jpg',
             antwoord: 'G',
-            feedbackTekstGoed: 'Dit is een amfibievoertuig. Het kan op het water en op het land worden gebruikt',
-            feedbackTekstFout: 'Helaas. Dit is een amfibievoertuig. Deze zijn geschikt voor water en op het land.'
+            feedbackTekstGoed:
+                'Dit is een amfibievoertuig. Het kan op het water en op het land worden gebruikt',
+            feedbackTekstFout:
+                'Helaas. Dit is een amfibievoertuig. Deze zijn geschikt voor water en op het land.'
         },
         {
             id: 2,
             tekst: 'Een pizza Quattro Stagione bevat vijf soorten kaas.',
             afbeelding: '../img/pizza-01.jpg',
             antwoord: 'F',
-            feedbackTekstGoed: 'Correct. Een pizza Quattro Stagione bevat vier soorten kaas, geen vijf.',
-            feedbackTekstFout: 'Helaas. Een pizza Quattro Stagione bevat vier soorten gaas. Geen vijf.'
+            feedbackTekstGoed:
+                'Correct. Een pizza Quattro Stagione bevat vier soorten kaas, geen vijf.',
+            feedbackTekstFout:
+                'Helaas. Een pizza Quattro Stagione bevat vier soorten gaas. Geen vijf.'
         },
         {
             id: 3,
             tekst: 'De maximale salarisschaal bij Defensie is schaal 12.',
             afbeelding: '../img/salaris-01.jpg',
             antwoord: 'F',
-            feedbackTekstGoed: 'Correct. Na xxx-dienstjaren kom je in schaal 12.',
-            feedbackTekstFout: 'Helaas. De maximale schaal is Schaal 16, al is dat niet voor iedereen weggelegd.'
+            feedbackTekstGoed:
+                'Correct. Na xxx-dienstjaren kom je in schaal 12.',
+            feedbackTekstFout:
+                'Helaas. De maximale schaal is Schaal 16, al is dat niet voor iedereen weggelegd.'
         }
-    ]
+    ];
 
     // Functie om de vraag op scherm te tonen
     function stelVraag(index) {
-        $$('#vraag').text(vragen[index].tekst)
+        $$('#vraag').text(vragen[index].tekst);
         $$('#afbeelding').attr('src', vragen[index].afbeelding);
 
-        $$('#btnGoed').on('click', function () {
+        $$('#btnGoed').on('click', function() {
             if (vragen[index].antwoord === 'G') {
-                $$('#feedback').text('Goed!')
-                $$('#feedbackTekst').text(vragen[index].feedbackTekstGoed)
-                antwoord = 'G'
-
+                $$('#feedback').text('Goed!');
+                $$('#feedbackTekst').text(vragen[index].feedbackTekstGoed);
+                antwoord = 'G';
             } else {
-                $$('#feedback').text('Fout')
-                $$('#feedbackTekst').text(vragen[index].feedbackTekstFout)
-                antwoord = 'F'
+                $$('#feedback').text('Fout');
+                $$('#feedbackTekst').text(vragen[index].feedbackTekstFout);
+                antwoord = 'F';
             }
-        })
+            // classes voor knoppen toevoegen/verwijderen om ze
+            // actief/inactief te maken;
+            $$('#btnNext').removeClass('disabled');
+            $$('#btnGoed, #btnFout').addClass('disabled');
+        });
 
-        $$('#btnFout').on('click', function () {
+        $$('#btnFout').on('click', function() {
             if (vragen[index].antwoord === 'G') {
-                $$('#feedback').text('Fout')
-                $$('#feedbackTekst').text(vragen[index].feedbackTekstFout)
-                antwoord = 'F'
+                $$('#feedback').text('Fout');
+                $$('#feedbackTekst').text(vragen[index].feedbackTekstFout);
+                antwoord = 'F';
             } else {
-                $$('#feedback').text('Goed!')
-                $$('#feedbackTekst').text(vragen[index].feedbackTekstGoed)
-                antwoord = 'G'
+                $$('#feedback').text('Goed!');
+                $$('#feedbackTekst').text(vragen[index].feedbackTekstGoed);
+                antwoord = 'G';
             }
-        })
+            // classes voor knoppen toevoegen/verwijderen om ze
+            // actief/inactief te maken;
+            $$('#btnNext').removeClass('disabled');
+            $$('#btnGoed, #btnFout').addClass('disabled');
+        });
     }
 
     // Functie om eindresultaat te tonen
     function toonResultaat() {
         if (score > 2) {
-            $$('#divResult').text(score + ' goed, Je bent geslaagd!')
+            $$('#divResult').text(score + ' goed, Je bent geslaagd!');
         } else {
-            $$('#divResult').text(score + ' goed, Je bent gezakt!')
+            $$('#divResult').text(score + ' goed, Je bent gezakt!');
         }
     }
 
     // Retourneer het Component-object met pageInit e.d.
     return {
         on: {
-            pageInit: function () {
+            pageInit: function() {
                 score = 0;
                 stelVraag(index);
 
-                $$('#btnNext').on('click', function () {
-                    // reset vraag/antwoord tekst
+                // 1. Knop Volgende vraag
+                $$('#btnNext').on('click', function() {
+                    // 1a. Reset vraag/antwoord tekst
                     $$('#feedback').text('');
                     $$('#feedbackTekst').text('');
+
+                    // 1b. Reset knoppen actief/inactief
+                    $$('#btnNext').addClass('disabled');
+                    $$('#btnGoed, #btnFout').removeClass('disabled');
+
+                    // 1c. Check het antwoord
                     if (antwoord === 'G') {
                         // Het antwoord was goed, ga de score ophogen.
                         score += 1;
-                        console.log(score);
                     }
+                    console.log('huidige score: ', score); // debugging: even huidige score in de console tonen.
                     index = index + 1;
                     if (index > vragen.length - 1) {
                         index = 0;
-                        // straks: ga naar resultaat
+                        // vragen zijn afgelopen, toon het resultaat
                         toonResultaat(score);
                     } else {
-                        stelVraag(index)
+                        stelVraag(index);
                     }
-                })
-
-            }// end pageInit
+                });
+            } // end pageInit
         }
-    }
+    };
 </script>
