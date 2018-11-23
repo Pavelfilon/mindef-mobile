@@ -12,6 +12,14 @@ var app = new Framework7({
         {
             path: '/maps-component/',
             componentUrl: './pages/maps-component.html'
+        },
+        {
+            path: '/conferentie-p/',
+            url: './pages/conferentie-page.html'
+        },
+        {
+            path: '/conferentie-c/',
+            componentUrl: './pages/conferentie-component.html'
         }
     ]
     // <-- overige parameters

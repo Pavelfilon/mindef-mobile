@@ -1,4 +1,4 @@
-<!-- barcode.html -->
+<!-- ajax.html -->
 <template>
     <div class="page">
         <div class="navbar">
@@ -18,21 +18,17 @@
             <button class="col button button-raised" @click="scan">
                 Scan code
             </button>
-            <div id="resultBarcode">
-                Barcode plugin:
-                <a
-                    href="https://github.com/phonegap/phonegap-plugin-barcodescanner"
-                    >https://github.com/phonegap/phonegap-plugin-barcodescanner</a
-                >
-            </div>
+
+            <button class="col button button-raised" @click="scanVoorbeeld">
+                Voorbeeld vanaf de website
+            </button>
+            <div id="resultBarcode"></div>
         </div>
         <!-- /page-content -->
     </div>
 </template>
 <script>
     var $$ = Dom7;
-    document.addEventListener('deviceready', onDeviceReady, false);
-    function onDeviceReady() {}
     return {
         on: {},
         methods: {
@@ -52,14 +48,42 @@
                                 result.cancelled
                         );
                         if (result.format === 'QR_CODE') {
-                            // eerst testen of de pagina bestaat, zo ja:
+                            // QR-code gevonden. Spring naar
+                            // pagina binnen de app. Route samenstellen:
                             var route = '/' + result.text + '/';
                             if (route)
                                 app.router.navigate('/' + result.text + '/');
-                            // zo nee, toon foutmelding
+                        } else if (result.format === 'CODE_128') {
+                            // Barcode gevonden. Ga naar Google met deze
+                            // barcode als zoekopdracht.
+                            var url =
+                                'https://www.google.com/search?q=' +
+                                result.text;
+                            window.open(url);
                         } else {
+                            // zo nee, toon foutmelding
                             alert('sorry, code niet bekend');
                         }
+                    },
+                    function(error) {
+                        alert('Scanning failed: ' + error);
+                    }
+                );
+            }, // end scan
+            scanVoorbeeld: function() {
+                cordova.plugins.barcodeScanner.scan(
+                    function(result) {
+                        alert(
+                            'We hebben een CODE gescand:\n' +
+                                'Result: ' +
+                                result.text +
+                                '\n' +
+                                'Format: ' +
+                                result.format +
+                                '\n' +
+                                'Cancelled: ' +
+                                result.cancelled
+                        );
                     },
                     function(error) {
                         alert('Scanning failed: ' + error);

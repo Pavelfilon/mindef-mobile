@@ -31,8 +31,11 @@
 		<div class="view view-main">
 			<!-- Knop tonen als om een of andere reden niet direct naar component wordt genavigeerd. -->
 			<a href="/maps-component/" id="btnGotoMaps" class="button bg-color-blue color-black">Go to template</a>
-		
+			<a href="/conferentie-p/"> Naar statische pagina</a><br>
+			<a href="/conferentie-c/"> Naar dynamische component</a><br>
+			
 		</div>
+		
 	</div>
 	</div>
 	<!-- Path to Framework7 Library JS-->
@@ -53,7 +56,7 @@
 	var $$ = Dom7;
 	// als niet automatisch naar de maps-component
 	// wordt gesprongen, dan een klikevent simuleren.
-	$$('#btnGotoMaps').trigger('click');
+	// $$('#btnGotoMaps').trigger('click');
 	// this.$f7.mainView.router.load({url: "/maps-component/"})
 
 	</script>
